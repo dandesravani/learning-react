@@ -49,7 +49,7 @@ export const App = () => (
 
 * Everytime set state called the component will be re-rendered and count value will be updtaed.
 
-* In React each component own its own state which is called ***signgle ownership model***. In the above example Counter owns its own state nobody can change it and no chance of sharing it.There are no multiple pointers to it also.
+* In React each component own its own state which is called ***single ownership model***. In the above example Counter owns its own state nobody can change it and no chance of sharing it.There are no multiple pointers to it also.
 
 * In most of the value based programming languages function will be created after calling it and after the value goes to unused the function memory will be garbage collected where in React the counter functions will be long lived. Though state is not shared among multiple other objects it is mutable and functions like counter can be long lasting in memory. 
 
