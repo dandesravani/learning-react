@@ -1,6 +1,5 @@
 **Redux**
-* Redux does maintains state which will be then converted into props.These Props are provided to the component which retruns the VDOM and gets into the browser.
-* This browser generates events these events makes changes in the redux state.
+* Redux does maintains state which will be then converted into props.These Props are provided to the component which retruns the view and gets into the browser then browser generates events these events makes changes in the redux state.
 
 ```mermaid
 graph TD
