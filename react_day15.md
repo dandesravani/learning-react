@@ -163,11 +163,7 @@ export const Timer = () => {
 Imagine the interval has started and it is 250ms and then setStep has called and then 250ms are lost because we are clearing the previous interval and set up a new one and 1000ms unnecessarily calling setInterval and clear interval because of change in step.
 
 ```JS
-const timer
-R
-edu
-cer
- = () => {
+const timerReducer = () => {
     switch(action.type) {
         case 'seconds':
             return {...state,seconds:state.seconds+state.step}
