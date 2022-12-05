@@ -1,0 +1,140 @@
+```JS
+  import { Box, Button, Heading, Text } from '@chakra-ui/react'
+import { atom, useAtomValue, useSetAtom } from 'jotai'
+import React from 'react'
+
+const counterAtom = atom(0) // This is the reactive value
+
+const incAtom = atom(null, (get, set, _) => {
+  const next = get(counterAtom) + 1
+  set(counterAtom, next)
+})
+
+const decAtom = atom(null, (get, set, _) => {
+  const next = get(counterAtom) - 1
+  if (next >= 0) {
+    set(counterAtom, next)
+  }
+})
+
+const CounterView = () => {
+  const count = useAtomValue(counterAtom)
+
+  return (
+    <Text fontSize="3xl" pl="5">
+      {count}
+    </Text>
+  )
+}
+
+const CounterActions = () => {
+  const inc = useSetAtom(incAtom)
+  const dec = useSetAtom(decAtom)
+
+  return (
+    <Box>
+      <Button onClick={inc}>+</Button>
+      <Button onClick={dec}>-</Button>
+    </Box>
+  )
+}
+
+const Header = () => {
+  React.useEffect(() => {
+    console.log('header')
+  })
+
+  return <Heading textAlign="center">Jotai Course</Heading>
+}
+
+export const JotaiCounter = () => (
+  <Box>
+    <Header />
+    <CounterView />
+    <CounterActions />
+  </Box>
+)
+```
+
+- An atom is an reactive value. we can absorb that reactive value or use it to create a new one by using "useAtomValue"
+- Jotai makes use of reactive tree for retaining state and reactive model for rendering and updating.
+- By useAtomValue indicates updating in atom for that perticular component everything else remains same similar to useState.
+- If we have 2 counters we can create as many as atoms.In redux we can kind of keep everything in single atom if we have two components not sharing the state still maintaining single state unnecessarily re renders the every component.
+- In Jotai we can have as many as atoms so that the state in respective component will render.
+- useAtomValue is used to get the value.useSetAtom to get setter function/update function which are usedto update the value.This way we can seperate pure functions
+  and impure function.
+- In JotaiCounter component when ever the Buttons are clicked counter value will get updated leaves CounterView component re-render where other components remains same.
+  this is a advantage with jotai only components which should be re-rendered will get re-rendered.
+
+**_JotaiReducer_**
+
+```JS
+import { atomWithReducer } from 'jotai/utils'
+
+type State = number
+type Action = { type: 'inc' | 'dec' }
+
+const countReducer = (state: State, action: Action): State => {
+if (action.type === 'inc') {
+return state + 1
+}
+if (action.type === 'dec') {
+return state - 1
+}
+throw new Error('unknown action type')
+}
+
+export const countReducerAtom = atomWithReducer(0, countReducer)
+```
+
+- handlers and effects are responsible for updating a value and renders a component and represents the vdom/view.
+- state management solutions generally provides 3 things
+  1. components read values from state.
+  2. Provides selectors which helps in re-rendering right components when ever state changes.
+  3. Update state through handlers and effects.
+- Redux comes with all the solutions that are mentioned above. update state will be handled by dispatch functions.
+  where in jotai directly update the atoms using setter function.We can read values using useAtomValue.
+- Selectors in jotai are split to do 2 different solutions.
+  1. spilt atoms so that components can be rendered independent with each other.
+  2. selectors can also be used as derived values. If one atom updated another atom that is derived from it will also get updated.
+-
+
+```JS
+const counterAtom = atom(0)
+
+const incAtom = atom(null, (get, set, _) => {
+  const next = get(counterAtom) + 1
+  set(counterAtom, next)
+})
+
+const decAtom = atom(null, (get, set, _) => {
+  const next = get(counterAtom) - 1
+  if (next >= 0) {
+    set(counterAtom, next)
+  }
+})
+
+const CounterView = () => {
+  const count = useAtomValue(counterAtom)
+
+  return (
+    <Text fontSize="3xl" pl="5">
+      {count}
+    </Text>
+  )
+}
+
+const CounterActions = () => {
+  const inc = useSetAtom(incAtom)
+  const dec = useSetAtom(decAtom)
+
+  return (
+    <Box>
+      <Button onClick={inc}>+</Button>
+      <Button onClick={dec}>-</Button>
+    </Box>
+  )
+}
+```
+
+In the above example we can see seperate setter functions like incAtom and decAtom as updater functions.
