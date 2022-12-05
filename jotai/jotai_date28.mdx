@@ -1,0 +1,43 @@
+**Jotai**
+
+- Jotai is a library which is used to maintain state globally.
+- There are other state management libraries like zustand and valtio where zustand is not preferable as its not performant with typescript.
+- React is based on principle that view is function of state.
+- Imagine there exists a state which can be passed to top level component all the state needs to keep in single state our component is depend on that single state
+  and produce a view.This leads to a situation that whenever state changes and component gets called with that new value and used to construct a view.
+
+  > The above situation can leads to 2 problems
+  >
+  > - Representing each and every value irrespective of what it is and where it is into one single state make it to extemley complicated especialy for complex applications and also updating it might get slow.
+  >   since state is global any component can access any state without any restriction.
+  > - Unnecessary rerenders. Everytime any state changes makes components re-render even state doesn't have any effect on that component.
+
+A React component is an object the moment it is having state it acts as object.
+
+```JS
+export const Hello = ({value}:any) => {
+  const [v,set] = React.useState(value)
+  return (
+  retrun <h1 onClick={()=>set(v)}>{v}</h1>
+  )
+}
+```
+
+Here v can be capture values at any perticular time so v can be any value which we cannot predict.Best practices are need to be followed in order to understand the problem as well as solutions.
+
+**_Best Practices for state mangement_**
+
+1. If a component have a state and the component is responsible to change/manages its own state then it’s better to use useState instead of keeping it as global state.
+2. If there is a state that is shared between components and there exists a parent then the state should be kept in the parent.In this case parent will manage the state and children will only view/ react to that change in state(Lifting state up).
+3. If two or more components highly coupled with each other and need to maintain state locally and provide external api better make use of context.
+4. For page state context or jotai
+5. For app state use jotai
+6. For config state use context. Config state is something which does not change often.
+7. Always use function form of setState. useState with function form of setState becomes useReducer.
+8. Prefer useReducer for local state management.
+9. If exists simple state then make use of useState but the function form of setState
+10. Avoid using useEffect. But it is impossible not to use it because it helps us connect with external world. So make sure to encapsulate it using proper api and use it.
+
+Its hard to create reusable components using jotai or context. In that scenerio we can use redux where we can construct reusable components and able to maintain our own state management.
+
+In some cases we can acheieve reusablity using context where provider is not accessble out side of subtree.
